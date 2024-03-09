@@ -7,17 +7,24 @@ CC_HEX= arm-none-eabi-objcopy
 HEX_FLAGS= -O ihex
 
 
-SRC     := ./
-SRCS    := $(wildcard $(SRC)/*.c)
-OBJS    := $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS))
+HAL_SRC     	:= ../../HAL_Drivers
+HAL_SRCS    	:= $(wildcard $(HAL_SRC)/*.c)
+HAL_OBJS    	:= $(patsubst $(HAL_SRC)/%.c,$(HAL_OBJ)/%.o,$(HAL_SRCS))
+
+APP_SRC     	:= ./
+APP_SRCS    	:= $(wildcard $(APP_SRC)/*.c)
+APP_OBJS    	:= $(patsubst $(APP_SRC)/%.c,$(APP_OBJ)/%.o,$(APP_SRCS))
+
+all: $(BUILD_DIR) final.elf final.hex
 
 
-all:final.elf final.hex
-
-final.elf: $(OBJS)
+final.elf: $(HAL_OBJS) $(APP_OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^
 
-$(OBJ)/%.o: $(SRC)/%.c
+$(HAL_OBJ)/%.o: $(HAL_SRC)/%.c
+	$(CC) $(CFLAGS) $< -o $@
+
+$(APP_OBJ)/%.o: $(APP_SRC)/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
 final.hex:final.elf
