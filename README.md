@@ -1,2 +1,2 @@
 # stm32_sratch
-This directory is created for learn everything from scratch
+This directory is created for to learn everything from scratch
